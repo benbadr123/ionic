@@ -174,7 +174,7 @@ export class Searchbar {
     // wait for 4 frames
     setTimeout(() => {
       const value = this.value;
-      if (value !== undefined && value !== '') {
+      if (value) {
         this.value = '';
         this.ionInput.emit();
       }

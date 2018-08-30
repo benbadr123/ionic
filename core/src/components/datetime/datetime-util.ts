@@ -1,5 +1,5 @@
 
-export function renderDatetime(template: string, value: DatetimeData, locale: LocaleData) {
+export function renderDatetime(template: string, value: DatetimeData | undefined, locale: LocaleData) {
   if (value === undefined) {
     return undefined;
   }
@@ -192,7 +192,7 @@ export function parseDate(val: string | undefined): DatetimeData | null {
     }
   }
 
-  if (parse == null) {
+  if (parse === null) {
     // wasn't able to parse the ISO datetime
     return null;
   }
@@ -352,7 +352,7 @@ export function convertDataToISO(data: DatetimeData): string {
               rtn += '.' + threeDigit(data.millisecond);
             }
 
-            if (data.tzOffset == null || data.tzOffset === 0) {
+            if (!data.tzOffset) {
               // YYYY-MM-DDTHH:mm:SSZ
               rtn += 'Z';
 

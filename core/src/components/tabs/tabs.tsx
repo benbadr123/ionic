@@ -103,7 +103,7 @@ export class Tabs implements NavOutlet {
   }
 
   componentDidLoad() {
-    this.initSelect();
+    return this.initSelect();
   }
 
   componentDidUnload() {
@@ -119,14 +119,16 @@ export class Tabs implements NavOutlet {
   @Listen('ionTabbarClick')
   protected onTabClicked(ev: CustomEvent<HTMLIonTabElement>) {
     const selectedTab = ev.detail;
-    if (this.useRouter && selectedTab.href != null) {
+    const href = selectedTab.href as string | undefined;
+    if (this.useRouter && href !== undefined) {
       const router = this.doc.querySelector('ion-router');
       if (router) {
-        router.push(selectedTab.href);
+        return router.push(href);
       }
-      return;
+      return Promise.resolve(false);
+    } else {
+      return this.select(selectedTab);
     }
-    this.select(selectedTab);
   }
 
   /**

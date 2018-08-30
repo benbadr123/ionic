@@ -68,6 +68,7 @@ export class Nav implements NavOutlet {
     const isDev = Build.isDev;
     if (this.root) {
       if (!this.useRouter) {
+        // tslint:disable-next-line:no-floating-promises
         this.setRoot(this.root, this.rootParams);
       } else if (isDev) {
         console.warn(
@@ -327,7 +328,7 @@ export class Nav implements NavOutlet {
   @Method()
   setRouteId(
     id: string,
-    params: any,
+    params: ComponentProps | undefined,
     direction: number
   ): Promise<RouteWrite> {
     const active = this.getActiveSync();
@@ -461,7 +462,7 @@ export class Nav implements NavOutlet {
     ti: TransitionInstruction,
     done: TransitionDoneFn | undefined
   ): Promise<boolean> {
-    if (this.isTransitioning && ti.opts && ti.opts.skipIfBusy === true) {
+    if (this.isTransitioning && !!ti.opts && ti.opts.skipIfBusy === true) {
       return Promise.resolve(false);
     }
 
@@ -487,7 +488,7 @@ export class Nav implements NavOutlet {
   }
 
   private success(result: NavResult, ti: TransitionInstruction) {
-    if (this.transInstr === null) {
+    if (this.destroyed) {
       this.fireError('nav controller was destroyed', ti);
       return;
     }
@@ -508,13 +509,14 @@ export class Nav implements NavOutlet {
       if (router) {
         const direction = result.direction === 'back' ? -1 : 1;
 
+        // tslint:disable-next-line:no-floating-promises
         router.navChanged(direction);
       }
     }
   }
 
   private failed(rejectReason: any, ti: TransitionInstruction) {
-    if (this.transInstr === null) {
+    if (this.destroyed) {
       this.fireError('nav controller was destroyed', ti);
       return;
     }
@@ -547,6 +549,7 @@ export class Nav implements NavOutlet {
       return false;
     }
 
+    // tslint:disable-next-line:no-floating-promises
     this.runTransition(ti);
     return true;
   }
@@ -602,9 +605,9 @@ export class Nav implements NavOutlet {
     if (ti.opts.delegate === undefined) {
       ti.opts.delegate = this.delegate;
     }
-    if (ti.removeView != null) {
-      assert(ti.removeStart != null, 'removeView needs removeStart');
-      assert(ti.removeCount != null, 'removeView needs removeCount');
+    if (ti.removeView !== undefined) {
+      assert(ti.removeStart !== undefined, 'removeView needs removeStart');
+      assert(ti.removeCount !== undefined, 'removeView needs removeCount');
 
       const index = this.views.indexOf(ti.removeView);
       if (index < 0) {
@@ -612,7 +615,7 @@ export class Nav implements NavOutlet {
       }
       ti.removeStart! += index;
     }
-    if (ti.removeStart != null) {
+    if (ti.removeStart !== undefined) {
       if (ti.removeStart < 0) {
         ti.removeStart = viewsLength - 1;
       }
@@ -662,14 +665,14 @@ export class Nav implements NavOutlet {
     leavingView: ViewController | undefined
   ): ViewController | undefined {
     const insertViews = ti.insertViews;
-    if (insertViews) {
+    if (insertViews !== undefined) {
       // grab the very last view of the views to be inserted
       // and initialize it as the new entering view
       return insertViews[insertViews.length - 1];
     }
 
     const removeStart = ti.removeStart;
-    if (removeStart != null) {
+    if (removeStart !== undefined) {
       const views = this.views;
       const removeEnd = removeStart + ti.removeCount!;
       for (let i = views.length - 1; i >= 0; i--) {
@@ -701,7 +704,7 @@ export class Nav implements NavOutlet {
     let destroyQueue: ViewController[] | undefined;
 
     // there are views to remove
-    if (removeStart != null && removeCount != null) {
+    if (removeStart !== undefined && removeCount !== undefined) {
       assert(removeStart >= 0, 'removeStart can not be negative');
       assert(removeCount >= 0, 'removeCount can not be negative');
 
@@ -912,6 +915,7 @@ export class Nav implements NavOutlet {
       progressAnimation: true
     };
 
+    // tslint:disable-next-line:no-floating-promises
     this.queueTrns(
       {
         removeStart: -1,

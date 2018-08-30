@@ -108,22 +108,22 @@ export class Button {
     }
   }
 
-  onFocus() {
+  private onFocus() {
     this.ionFocus.emit();
   }
 
-  onKeyUp() {
+  private onKeyUp() {
     this.keyFocus = true;
   }
 
-  onBlur() {
+  private onBlur() {
     this.keyFocus = false;
     this.ionBlur.emit();
   }
 
-  onClick(ev: Event) {
+  private onClick(ev: Event) {
     if (this.type === 'button') {
-      openURL(this.win, this.href, ev, this.routerDirection);
+      return openURL(this.win, this.href, ev, this.routerDirection);
 
     } else if (hasShadowDom(this.el)) {
       // this button wants to specifically submit a form
@@ -142,6 +142,7 @@ export class Button {
         fakeButton.remove();
       }
     }
+    return Promise.resolve(false);
   }
 
   hostData() {

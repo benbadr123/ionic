@@ -136,7 +136,7 @@ export class Toast implements OverlayInterface {
     ev.stopPropagation();
     ev.preventDefault();
 
-    this.dismiss();
+    return this.dismiss();
   }
 
   /**
@@ -146,7 +146,7 @@ export class Toast implements OverlayInterface {
   async present(): Promise<void> {
     await present(this, 'toastEnter', iosEnterAnimation, mdEnterAnimation, this.position);
 
-    if (this.duration) {
+    if (this.duration > 0) {
       this.durationTimeout = setTimeout(() => this.dismiss(), this.duration);
     }
   }

@@ -11,10 +11,9 @@ export function startStatusTap(win: Window, queue: QueueApi) {
       }
       const contentEl = el.closest('ion-content');
       if (contentEl) {
+        // tslint:disable-next-line:no-floating-promises
         contentEl.componentOnReady().then(() => {
-          queue.write(() => {
-            contentEl.scrollToTop(300);
-          });
+          queue.write(() => contentEl.scrollToTop(300));
         });
       }
     });

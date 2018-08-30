@@ -96,9 +96,9 @@ export class Animator {
    * not have a duration, then it'll get the duration from its parent.
    */
   getDuration(opts?: PlayOptions): number {
-    if (opts && opts.duration != null) {
+    if (opts && opts.duration !== undefined) {
       return opts.duration;
-    } else if (this._duration != null) {
+    } else if (this._duration !== undefined) {
       return this._duration;
     } else if (this.parent) {
       return this.parent.getDuration();
@@ -129,7 +129,7 @@ export class Animator {
     if (this._isReverse && this._reversedEasingName) {
       return this._reversedEasingName;
     }
-    return this._easingName != null ? this._easingName : (this.parent && this.parent.getEasing()) || null;
+    return this._easingName !== undefined ? this._easingName : (this.parent && this.parent.getEasing()) || null;
   }
 
   /**
@@ -564,7 +564,7 @@ export class Animator {
     }
 
     if (this._hasDur) {
-      if (stepValue !== null && stepValue !== undefined) {
+      if (stepValue !== undefined) {
         // too late to have a smooth animation, just finish it
         // ******** DOM WRITE ****************
         this._setTrans(0, true);

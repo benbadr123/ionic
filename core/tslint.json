@@ -8,6 +8,8 @@
     "trailing-comma": false,
     "no-null-keyword": false,
     "no-console": false,
-    "no-floating-promises": false
+
+    "strict-type-predicates": true,
+    "await-promise": true
   }
 }

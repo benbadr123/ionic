@@ -68,7 +68,7 @@ export class Input {
   /**
    * If true, the value will be cleared after focus upon edit. Defaults to `true` when `type` is `"password"`, `false` for all other types.
    */
-  @Prop({ mutable: true }) clearOnEdit!: boolean;
+  @Prop({ mutable: true }) clearOnEdit?: boolean;
 
   /**
    * Set the amount of time, in milliseconds, to wait to trigger the `ionChange` event after each keystroke. Default `0`.

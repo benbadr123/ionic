@@ -137,7 +137,7 @@ export class Alert implements OverlayInterface {
       return (typeof btn === 'string')
         ? { text: btn, role: btn.toLowerCase() === 'cancel' ? 'cancel' : undefined }
         : btn;
-    }).filter(b => b != null);
+    });
   }
 
   @Watch('inputs')
@@ -181,7 +181,7 @@ export class Alert implements OverlayInterface {
 
   @Listen('ionBackdropTap')
   protected onBackdropTap() {
-    this.dismiss(null, BACKDROP);
+    return this.dismiss(null, BACKDROP);
   }
 
   @Listen('ionAlertWillDismiss')
@@ -205,7 +205,7 @@ export class Alert implements OverlayInterface {
    * Dismiss the alert overlay after it has been presented.
    */
   @Method()
-  dismiss(data?: any, role?: string): Promise<void> {
+  dismiss(data?: any, role?: string): Promise<boolean> {
     return dismiss(this, data, role, 'alertLeave', iosLeaveAnimation, mdLeaveAnimation);
   }
 
@@ -252,13 +252,13 @@ export class Alert implements OverlayInterface {
     const role = button.role;
     const values = this.getValues();
     if (isCancel(role)) {
-      this.dismiss({ values }, role);
-      return;
+      return this.dismiss({ values }, role);
     }
     const returnData = this.callButtonHandler(button, values);
     if (returnData !== false) {
-      this.dismiss({ values, ...returnData }, button.role);
+      return this.dismiss({ values, ...returnData }, button.role);
     }
+    return Promise.resolve(false);
   }
 
   private callButtonHandler(button: AlertButton | undefined, data?: any) {

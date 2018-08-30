@@ -144,7 +144,7 @@ export class Item {
     const clickable = this.isClickable();
     const TagType = clickable ? (href ? 'a' : 'button') : 'div';
     const attrs = TagType === 'button' ? { type } : { href };
-    const showDetail = detail != null ? detail : mode === 'ios' && clickable;
+    const showDetail = detail !== undefined ? detail : mode === 'ios' && clickable;
 
     return (
       <TagType

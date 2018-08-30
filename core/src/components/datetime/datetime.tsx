@@ -356,7 +356,7 @@ export class Datetime {
       }
 
       const selectedIndex = yearCol.selectedIndex;
-      if (selectedIndex != null) {
+      if (selectedIndex !== undefined) {
         const yearOpt = yearCol.options[selectedIndex];
         if (yearOpt) {
           // they have a selected year value
@@ -400,17 +400,17 @@ export class Datetime {
 
     if (this.yearValues) {
       const years = convertToArrayOfNumbers(this.yearValues, 'year');
-      if (this.min == null) {
+      if (this.min === undefined) {
         this.min = Math.min.apply(Math, years);
       }
-      if (this.max == null) {
+      if (this.max === undefined) {
         this.max = Math.max.apply(Math, years);
       }
     } else {
-      if (this.min == null) {
+      if (this.min === undefined) {
         this.min = (todaysYear - 100).toString();
       }
-      if (this.max == null) {
+      if (this.max === undefined) {
         this.max = todaysYear.toString();
       }
     }
@@ -492,9 +492,7 @@ export class Datetime {
 
   hasValue(): boolean {
     const val = this.datetimeValue;
-    return val
-      && typeof val === 'object'
-      && Object.keys(val).length > 0;
+    return Object.keys(val).length > 0;
   }
 
   hostData() {
